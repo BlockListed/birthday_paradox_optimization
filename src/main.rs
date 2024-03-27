@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use bitvec::bitvec;
 
 use rand::Rng;
 use rand::RngCore;
@@ -24,9 +24,9 @@ fn carlo_sim(idx: u64) -> bool {
     let bdays: Vec<u16> = (0..23).map(|_| rng.gen_range(1..366)).collect();
 
     let duplicate_bday = {
-        let mut set = HashSet::with_capacity(bdays.len());
+        let mut set = bitvec![0; 365];
 
-        bdays.into_iter().fold(false, |acc, e| acc || !set.insert(e))
+        bdays.into_iter().fold(false, |acc, e| acc || set.replace(e as usize - 1, true))
     };
 
     duplicate_bday
