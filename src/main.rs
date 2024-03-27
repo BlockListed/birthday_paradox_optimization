@@ -21,7 +21,13 @@ fn rand_generator(seed: u64) -> impl RngCore {
 fn carlo_sim(idx: u64) -> bool {
     let mut rng = rand_generator(idx);
 
-    let bdays: Vec<u16> = (0..23).map(|_| rng.gen_range(1..366)).collect();
+    let bdays = {
+        let mut bdays = [0u16; 23];
+
+        bdays.iter_mut().for_each(|slot| *slot = rng.gen_range(1..366));
+
+            bdays
+    };
 
     let duplicate_bday = {
         let mut set = bitvec![0; 365];
