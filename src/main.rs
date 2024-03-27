@@ -4,10 +4,12 @@ use rand::Rng;
 use rand::RngCore;
 use rand::SeedableRng;
 
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
+
 const CARLO_SIM_COUNT: u64 = 1_000_000;
 
 fn main() {
-    let duplicate_bdays = (0..CARLO_SIM_COUNT).map(carlo_sim).filter(|e| *e).count();
+    let duplicate_bdays = (0..CARLO_SIM_COUNT).into_par_iter().map(carlo_sim).filter(|e| *e).count();
 
     println!("{duplicate_bdays} out of {CARLO_SIM_COUNT} had duplicate bdays!");
 }
